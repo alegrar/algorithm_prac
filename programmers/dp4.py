@@ -16,7 +16,7 @@ def solution(money):
     dp2[1] = money[1]
 
     for j in range(2, len(money)):
-        dp2[i] = max(dp2[i-2]+money[i], dp2[i-1])
+        dp2[j] = max(dp2[j-2]+money[j], dp2[j-1])
 
     answer = max(max(dp1), max(dp2))
 
