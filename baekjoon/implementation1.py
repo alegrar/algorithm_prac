@@ -60,7 +60,7 @@ def bfs(rx,ry,bx,by):
                         break
                 if board[now_bx][now_by] == 'O': # 파란 구슬이 구멍에 들어간 경우 우선 넘기기
                     continue # 파란 구슬이 구멍에 안 들어가고 빨간 구슬이 구멍에 정상적으로 들어갔을 때를 찾기 위해
-                if now_rx == now_ry and now_bx == now_by : # 두 구슬의 위치가 같을 경우
+                if now_rx == now_bx and now_by == now_ry : # 두 구슬의 위치가 같을 경우
                     # 더 많이 이동한 구슬을 한 칸 뒤로!!
                     if abs(now_rx-rx) + abs(now_ry-ry) > abs(now_bx-bx) + abs(now_by-by):
                         now_rx -= dx[i]
