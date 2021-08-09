@@ -1,6 +1,7 @@
 # baekjoon # implementation 13460 # '구술탈출2'
 
 from collections import deque
+
 N, M = map(int, input().split())
 
 board =  [['']*M for i in range(N)]
@@ -9,62 +10,77 @@ for i in range(N):
     board[i] = now
 
 # 공 위치 저장
-blue, red = deque([0,0]), deque([0,0])
 for i in range(N):
     for j in range(M):
         if board[i][j] == 'B':
-            blue = [i,j]
+            bx, by = i, j
         if board[i][j] == 'R':
-            red = [i,j]
+            rx, ry = i, j
 
-# #이 나올 때까지 이동 -> 10번 이하로 위아래 오왼
+dx = [1,-1,0,0]
+dy = [0,0,1,-1]
 
-cnt = 0
-answer = 10
+def bfs(rx,ry,bx,by):
+    queue = deque()
+    queue.append((rx,ry,bx,by))
+    visited = [] # 방문 여부
+    visited.append((rx,ry,bx,by))
+    cnt = 0
+
+    while queue:
+        for _ in range(len(queue)):
+            rx, ry, bx, by = queue.popleft()
+            if cnt > 10 : # 10회 초과 시 탈출
+                print(-1)
+                return
+            if board[rx][ry] == 'O': # red가 무사히 구멍에 빠질 시 탈출
+                print(cnt)
+                return
+
+            for i in range(4):
+                now_rx, now_ry = rx, ry
+                while True: # 벽이 나오거나 구멍이 나오거나 공이 멈출때까지
+                    now_rx += dx[i] # 현재의 방향을 계속 더함
+                    now_ry += dy[i]
+                    if board[now_rx][now_ry] == '#': # 다음 step이 막혔을 경우
+                        now_rx -= dx[i]
+                        now_ry -= dy[i]
+                        break
+                    if board[now_rx][now_ry] == 'O':
+                        break
+                now_bx, now_by = bx, by
+                while True:
+                    now_bx += dx[i]
+                    now_by += dy[i]
+                    if board[now_bx][now_by] == '#':
+                        now_bx -= dx[i]
+                        now_by -= dy[i]
+                        break
+                    if board[now_bx][now_by] == 'O':
+                        break
+                if board[now_bx][now_by] == 'O': # 파란 구슬이 구멍에 들어간 경우 우선 넘기기
+                    continue # 파란 구슬이 구멍에 안 들어가고 빨간 구슬이 구멍에 정상적으로 들어갔을 때를 찾기 위해
+                if now_rx == now_ry and now_bx == now_by : # 두 구슬의 위치가 같을 경우
+                    # 더 많이 이동한 구슬을 한 칸 뒤로!!
+                    if abs(now_rx-rx) + abs(now_ry-ry) > abs(now_bx-bx) + abs(now_by-by):
+                        now_rx -= dx[i]
+                        now_ry -= dy[i]
+                    else :
+                        now_bx -= dx[i]
+                        now_by -= dy[i]
+
+                if (now_rx, now_ry, now_bx, now_by) not in visited:
+                    queue.append((now_rx,now_ry,now_bx,now_by))
+                    visited.append((now_rx,now_ry,now_bx,now_by))
+        cnt += 1
+    print(-1) # 실패한 경우
+
+bfs(rx, ry, bx, by)
 
 
-def dfs(red, blue, board, cnt, answer):
-    if cnt > 10 :
-        answer = -1
-        return answer
-    elif board[red[0]][red[1]] == 'O':
-        answer = min(cnt, answer)
-        return answer
-    
-    else :
-        dx = [1,-1,0,0]
-        dy = [0,0,1,-1]
-        for _ in range(10) :
-            for x,y in zip(dx,dy):
-                now_red = [red[0]+x, red[1]+y]
-                now_blue = [blue[0]+x, blue[0]+y]
-                if 0 <= now_red[0] < N and 0 <=now_red[1] < M : # red기준
-                    if board[now_red[0]][now_red[1]] == '.' or board[now_red[0]][now_red[1]] == 'O':
-                        next_x, next_y = 0, 0
-                        this_x, this_y = now_red[0], now_red[1]
-                        while True: # '#'이 나올 때까지나 B가 나올 때까지
-                            if now_red[0] == 1 :
-                                next_x += 1
-                            elif now_red[0] == -1 :
-                                next_x -= 1
-                            elif now_red[1] == 1:
-                                next_y += 1
-                            elif now_red[1] == -1 :
-                                next_y -= 1
-
-                            if board[this_x+next_x][this_y+next_y] == '#' or board[this_x][this_y] == 'B':
-                                red = [[this_x, this_y]]
-                                break
-                            elif board[this_x+next_x][this_y+next_y] == 'O':
-                                red = [[this_x+next_x][this_y+next_y]]
-                                break
-                        ###################### blue 처리하기
-                        cnt += 1
-                        answer = dfs(red,blue,board,cnt,answer)
 
 
-    return answer
 
-answer = dfs(red, blue, board, 0, 0)
+
 
 
