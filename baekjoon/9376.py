@@ -16,4 +16,4 @@ for _ in range(T) :
         line = list(map(str, sys.stdin.readline().split()))
         board[i] = line
 
-    #print(board)
+    print(board)
