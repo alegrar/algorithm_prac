@@ -25,8 +25,6 @@ for _ in range(int(T)) :
                 person.append((i,j))
     
 
-    ## 동시에 해야함!!!!ㅠㅠㅠㅠ
-    
     def bfs(r,c):
         queue = deque()
         queue.append([r,c,0,[]]) # row, col, door count, doors
@@ -39,10 +37,9 @@ for _ in range(int(T)) :
 
         while queue:
             row, col, cnt, doors = queue.popleft()
-            if row == 0 or row == N-1 or col == 0 or col == M-1 : # 탈출
-                if min_val > cnt :
-                    min_val = cnt
-                    min_doors = doors
+            if row == 0 or row == N-1 or col == 0 or col == M-1 :    
+                min_doors.append(doors) 
+
             for i in range(4):
                 x = row + dx[i]
                 y = col + dy[i]
@@ -54,13 +51,23 @@ for _ in range(int(T)) :
                         now_doors.append((x,y))
                     queue.append([x,y,now_cnt,now_doors])
                     check[x][y] = True
-        return min_val, min_doors
+        return min_doors
 
 
 
     check = [[False]*M for _ in range(N)]
-    answer = set()
-    for (r,c) in person:
-        this_min, this_doors = bfs(r,c)
-        answer.update(this_doors)
-    print(len(answer))
+    doors_dict = dict()
+    for i, (r,c) in enumerate(person):
+        this_doors = bfs(r,c)
+        doors_dict[i] = this_doors
+
+    
+    cnt = N*M
+    for no1 in doors_dict[0]:
+        for no2 in doors_dict[1]:
+            answer = set()
+            answer.update(no1)
+            answer.update(no2)
+            cnt = min(cnt, len(answer)) 
+    
+    print(cnt)
