@@ -15,11 +15,11 @@ def solution(n,k,cmd):
 
     for str in cmd :
         if str[0] == 'U':
-            step = str[2:]
+            step = int(str[2:])
             for _ in range(step):
                 curr = curr.prev
         elif str[0] == 'D':
-            step = str[2:]
+            step = int(str[2:])
             for _ in range(step):
                 curr = curr.next
         elif str[0] == 'C':
@@ -51,3 +51,4 @@ def solution(n,k,cmd):
         else :
             answer +='O'
     return answer
+
