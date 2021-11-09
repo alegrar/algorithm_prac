@@ -18,20 +18,8 @@ def solution(relation):
                     couple.append(row[i])
             temp.add(tuple(couple))
         skip = False
-        if len(temp) == len(relation):
-            for this_key in keys:
-                cnt = 0
-                for tk in this_key :
-                    for k in key:
-                        if len(this_key) == cnt and this_key != ():
-                            skip = True
-                            break
-                        if tk == k:
-                            cnt += 1
-            if skip :
-                continue
-            keys.append(key)
-            answer += 1
+        # 후보키인지 판단
+        #if len(temp) == len(relation):
 
     return answer
 
