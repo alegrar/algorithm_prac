@@ -8,7 +8,7 @@ def solution(relation):
         for combi in combinations(range(len(relation[0])), i):
             r_dict[combi] = 0
     print(r_dict)
-    keys = [tuple()]
+    keys = []
     for key in r_dict:
         temp = set(tuple())
         for row in relation:
@@ -17,13 +17,13 @@ def solution(relation):
                 if i in key:
                     couple.append(row[i])
             temp.add(tuple(couple))
-        skip = False
+
         # 후보키인지 판단
-        #if len(temp) == len(relation):
+        
 
     return answer
 
-relation = [["100","100","ryan","music","2"], ["200","200","apeach","math","2"], ["300","300","tube","computer","3"], ["400","400","con","computer","4"], ["500","500","muzi","music","3"], ["600","600","apeach","music","2"]]
-#relation = [["100","ryan","music","2"],["200","apeach","math","2"],["300","tube","computer","3"],["400","con","computer","4"],["500","muzi","music","3"],["600","apeach","music","2"]]
-relation = [['a','b','c'],['1','b','c'],['a','b','4'],['a','5','c']]
+#relation = [["100","100","ryan","music","2"], ["200","200","apeach","math","2"], ["300","300","tube","computer","3"], ["400","400","con","computer","4"], ["500","500","muzi","music","3"], ["600","600","apeach","music","2"]]
+relation = [["100","ryan","music","2"],["200","apeach","math","2"],["300","tube","computer","3"],["400","con","computer","4"],["500","muzi","music","3"],["600","apeach","music","2"]]
+#relation = [['a','b','c'],['1','b','c'],['a','b','4'],['a','5','c']]
 print(solution(relation))
